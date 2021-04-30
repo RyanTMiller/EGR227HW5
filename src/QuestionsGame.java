@@ -1,17 +1,37 @@
 import java.io.PrintStream;
 import java.util.Scanner;
 
+/**
+ *By: Ryan Miller
+ * Help from Andrew Cantrell
+ * This class creates a BST that helps the user play a game of
+ * 20 Questions.
+ */
 public class QuestionsGame {
     private QuestionNode tree;
 
+    /**
+     * initialize a new QuestionsGame object with a single node: object.
+     * @param object the object the user is thinking of
+     */
     public QuestionsGame(String object){
         tree = new QuestionNode(object);
     }
 
+    /**
+     * initialize a new QuestionsGame by reading from the scanner
+     * which contains a tree of questions.
+     * @param input input from the user
+     */
     public QuestionsGame(Scanner input){
         tree = builder(input, tree);
     }
 
+    /**
+     * a helper method for the questions game constructor to build the BST.
+     * @param input is the users input from the Scanner
+     * @param root is the QuestionNode object
+     */
     private QuestionNode builder(Scanner input, QuestionNode root){
         if(!input.hasNextLine()){
             return root;
@@ -27,6 +47,10 @@ public class QuestionsGame {
         return root;
     }
 
+    /**
+     * This method stores the current question in an output file which
+     * uses PrintStream.
+     */
     public void saveQuestions(PrintStream output){
         if(output == null){
             throw new IllegalArgumentException();
@@ -34,6 +58,9 @@ public class QuestionsGame {
         saveQuestions(output, tree);
     }
 
+    /**
+     * a private helper method to use recursion to manuver the tree.
+     */
     private void saveQuestions(PrintStream output, QuestionNode root){
         if(root != null){
             String temp = root.data;
@@ -49,6 +76,11 @@ public class QuestionsGame {
         }
     }
 
+    /**
+     * this method uses the current question tree to play the game until
+     * reaching the answer on a leaf node
+     * @param input is the users input from the Scanner
+     */
     public void play(Scanner input){
         if(tree == null){
             throw new IllegalArgumentException("Root is Null!!!");
@@ -56,6 +88,12 @@ public class QuestionsGame {
         tree = play(input, tree);
     }
 
+    /**
+     * a helper method which uses recursion for the play public method
+     * @param input is the users input from the Scanner
+     * @param root is the QuestionNode object
+     * @return the QuestionNode of the correct object
+     */
     private QuestionNode play(Scanner input, QuestionNode root){
         if(root.data.endsWith("?")){
             System.out.print(root.data + " (y/n)? ");
@@ -76,6 +114,12 @@ public class QuestionsGame {
         return root;
     }
 
+    /**
+     * this will create a new question if the computer loses the game.
+     * @param input is the users input from the Scanner
+     * @param root is the QuestionNode object
+     * @return the new QuestionNode for the new object
+     */
     private QuestionNode newQuestion(Scanner input, QuestionNode root){
         System.out.println("Boo! I Lose.  Please help me get better!");
         System.out.print("What is your object? ");
@@ -100,6 +144,10 @@ public class QuestionsGame {
         return new QuestionNode(newQ, root.left, root.right);
     }
 
+    /**
+     * creates the private class for the Binary Tree, which will
+     * allow us to navigate the questions.
+     */
     private static class QuestionNode {
         public final String data;
         public QuestionNode right;
